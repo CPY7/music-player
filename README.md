@@ -1,2 +1,2 @@
 # music-player
-self usage
+self use
