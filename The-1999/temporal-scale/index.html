@@ -5,7 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
   <meta name="meting:api" content="https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&auth=:auth&r=:r">
-  <style>body{margin:0;background:transparent}</style>
+  <style>
+    html, body { margin: 0; background: transparent; }
+    .aplayer {
+      margin: 0 !important;
+      background: rgba(30, 30, 40, 0.28) !important;
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      backdrop-filter: blur(18px) saturate(160%);
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      color: #fff !important;
+    }
+    .aplayer .aplayer-info { background: transparent !important; border-color: rgba(255,255,255,0.12) !important; }
+    .aplayer .aplayer-list { background: transparent !important; }
+    .aplayer .aplayer-title,
+    .aplayer .aplayer-author,
+    .aplayer .aplayer-list ol li .aplayer-list-title { color: #fff !important; }
+    .aplayer .aplayer-list ol li { border-color: rgba(255,255,255,0.10) !important; }
+    .aplayer .aplayer-list ol li:hover { background: rgba(255,255,255,0.12) !important; }
+    .aplayer .aplayer-list ol li.aplayer-list-light { background: rgba(255,255,255,0.16) !important; }
+  </style>
 </head>
 <body>
   <meting-js
