@@ -1,42 +1,104 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>世纪末尺度 · 液态玻璃播放器</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
   <meta name="meting:api" content="https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&auth=:auth&r=:r">
   <style>
-    html, body { margin: 0; background: transparent; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: transparent;
+      overflow: hidden;
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    /* === 液态玻璃容器（四层结构）=== */
+    .liquidGlass-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      border-radius: 18px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .liquidGlass-effect {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      -webkit-backdrop-filter: url(#glass-distortion) blur(2px) saturate(150%);
+      backdrop-filter: url(#glass-distortion) blur(2px) saturate(150%);
+    }
+    .liquidGlass-tint {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.10);
+    }
+    .liquidGlass-shine {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: 18px;
+      box-shadow:
+        inset 2px 2px 1px 0 rgba(255, 255, 255, 0.55),
+        inset -1px -1px 1px 1px rgba(255, 255, 255, 0.35);
+    }
+    .liquidGlass-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+    }
+    /* === APlayer 透明化 + 浅色文字 === */
     .aplayer {
       margin: 0 !important;
-      background: rgba(30, 30, 40, 0.28) !important;
-      -webkit-backdrop-filter: blur(18px) saturate(160%);
-      backdrop-filter: blur(18px) saturate(160%);
-      border-radius: 0 !important;
+      background: transparent !important;
       box-shadow: none !important;
       color: #fff !important;
     }
-    .aplayer .aplayer-info { background: transparent !important; border-color: rgba(255,255,255,0.12) !important; }
+    .aplayer .aplayer-info { background: transparent !important; border-color: rgba(255,255,255,0.14) !important; }
     .aplayer .aplayer-list { background: transparent !important; }
     .aplayer .aplayer-title,
     .aplayer .aplayer-author,
     .aplayer .aplayer-list ol li .aplayer-list-title { color: #fff !important; }
     .aplayer .aplayer-list ol li { border-color: rgba(255,255,255,0.10) !important; }
-    .aplayer .aplayer-list ol li:hover { background: rgba(255,255,255,0.12) !important; }
-    .aplayer .aplayer-list ol li.aplayer-list-light { background: rgba(255,255,255,0.16) !important; }
+    .aplayer .aplayer-list ol li:hover { background: rgba(255,255,255,0.14) !important; }
+    .aplayer .aplayer-list ol li.aplayer-list-light { background: rgba(255,255,255,0.18) !important; }
+    .aplayer .aplayer-lrc:before, .aplayer .aplayer-lrc:after { display: none !important; }
   </style>
 </head>
 <body>
-  <meting-js
-    server="tencent"
-    type="album"
-    id="0012f5Jn0w2cIn"
-    theme="#2ecc71"
-    order="list"
-    loop="all"
-    list-folded="false"
-    list-max-height="360px">
-  </meting-js>
+  <div class="liquidGlass-wrapper">
+    <div class="liquidGlass-effect"></div>
+    <div class="liquidGlass-tint"></div>
+    <div class="liquidGlass-shine"></div>
+    <div class="liquidGlass-content">
+      <meting-js
+        server="tencent"
+        type="album"
+        id="0012f5Jn0w2cIn"
+        fixed="false"
+        list-folded="false"
+        list-max-height="320px"
+        order="list"
+        loop="all">
+      </meting-js>
+    </div>
+  </div>
+
+  <svg style="position:absolute; width:0; height:0; overflow:hidden" aria-hidden="true">
+    <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%" filterUnits="objectBoundingBox">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise">
+        <animate attributeName="baseFrequency" dur="22s"
+                 values="0.008 0.008;0.012 0.01;0.008 0.008" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feGaussianBlur in="noise" stdDeviation="2" result="blurred"/>
+      <feDisplacementMap in="SourceGraphic" in2="blurred" scale="60" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
   <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 </body>
